@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace air_hockey_
 {
@@ -17,7 +18,6 @@ namespace air_hockey_
         /// Ryan Prosper,March,12,2021
         /// The Code is a simple Air Hockey Table Game 
         /// </summary>
-        int playerTurn = 1;
         int paddle1X = 110;
         int paddle1Y = 180;
         int player1Score = 0;
@@ -53,6 +53,9 @@ namespace air_hockey_
         SolidBrush p1 = new SolidBrush(Color.DarkRed);
         SolidBrush walls = new SolidBrush(Color.White);
         Pen nets = new Pen(Color.White);
+
+        SoundPlayer sound = new SoundPlayer(Properties.Resources.Hockey);
+        SoundPlayer airHorn = new SoundPlayer(Properties.Resources.Air_Horn);
         public Form1()
         {
             InitializeComponent();
@@ -130,13 +133,13 @@ namespace air_hockey_
 
             e.Graphics.FillRectangle(walls, 0, 1, 15, 150);
 
-            e.Graphics.FillRectangle(walls, 0, 1, 600, 15);
+            e.Graphics.FillRectangle(walls, 0, 1, 585, 15);
 
             e.Graphics.FillRectangle(walls, 570, 250, 15, 150);
 
             e.Graphics.FillRectangle(walls, 570, 1, 15, 150);
 
-            e.Graphics.FillRectangle(walls, 0, 400, 600, 15);
+            e.Graphics.FillRectangle(walls, 0, 400, 585, 15);
 
             e.Graphics.FillRectangle(midLine, 295, 16, 10, 384);
 
@@ -218,6 +221,7 @@ namespace air_hockey_
             //Set Colison For Player 1
             if (player1Rec.IntersectsWith(ballRec))
             {
+                sound.Play();
                 ballXSpeed *= +1;
                 ballX = paddle1X + paddleWidth + 1;
             }
@@ -251,8 +255,9 @@ namespace air_hockey_
             //Set Colison For Player 2
             if (player2Rec.IntersectsWith(ballRec))
             {
+                sound.Play();
                 ballXSpeed *= -1;
-                ballX = paddle2X + paddleWidth + 1;
+                ballX = paddle2X - paddleWidth - 1;
             }
             if (player2Rec.IntersectsWith(mid))
             {
@@ -310,6 +315,7 @@ namespace air_hockey_
             //Who got the point and rest the paddles positions 
             if (ballRec.IntersectsWith(net2))
             {
+                airHorn.Play();
                 player1Score++;
                 p1ScoreLabel.Text = $"{player1Score}";
                 ballX = 292;
@@ -324,6 +330,7 @@ namespace air_hockey_
 
                 if (ballRec.IntersectsWith(net1))
             {
+                airHorn.Play();
                 player2Score ++;
                 p2ScoreLabel.Text = $"{player2Score}";
                 ballX = 292;
